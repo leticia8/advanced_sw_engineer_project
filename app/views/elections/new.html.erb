@@ -1,0 +1,87 @@
+<div class="container col-6 py-4">
+  
+  <%= form_with scope: :election, url: elections_path, local: true do |form| %>
+    
+
+    <% if @election.present? && @election.errors.any? %>
+      <div id="error_explanation">
+        <ul>
+          <% @election.errors.full_messages.each do |error| %>
+            <li><%= error %></li>
+          <% end %>
+        </ul>
+      </div>
+    <% end %>
+
+    <div class="form-group row">
+      <div class="col-sm-6 py-3">
+          <h1><span class="shadow-lg badge badge-secondary">Agregar Elección</span></h1>
+      </div>
+      <div class="col-sm-6">
+        <%= form.number_field :user_id, value: current_user.id, class: 'form-control invisible', :readonly => true%>
+      </div>
+    </div>
+    <hr class="mb-4">
+
+    <div class="form-group mt-3">
+          <%= form.label :description, 'Descripción'  %><br>
+          <%= form.text_field :description, class: 'form-control', placeholder: 'Escribir descripción'  %>
+    </div>
+
+    <div class="form-group row">
+      <div class="col-sm-6 col-sm-2">
+        <%= form.label :start_date, 'Fecha de comienzo'%>
+        <%= form.datetime_field :start_date, start_year: 2020, class: 'form-control list-inline-item text-success' %>
+      </div>
+      <div class="col-sm-6">
+        <%= form.label :finish_date, 'Fecha de finalización' %>
+        <%= form.datetime_field :finish_date, start_year: 2020, class: 'form-control list-inline-item text-success' %>
+        </div>
+    </div>
+
+    <div class="form-group">
+      <%= form.label :segmented_by, 'Segmentado por: '%>
+      <%= form.select (:segmented_by), 
+      options_for_select([ 
+        ['Ciudad', 'city'],
+        ['Departamento','state'],
+        ['Edad','age'],
+      ]), {}, {class: 'form-control'} %> 
+    </div>
+    <div class="form-group">
+      <%= form.label :condition, 'Condición '%>
+      <%= form.select (:condition), 
+      options_for_select(city_options), {}, {class: 'form-control'} %> 
+    </div>
+    <hr class="mb-4">
+    <div class="form-group">
+      <%= form.submit 'Guardar', class: 'w-100 btn btn-success'%>
+      <a class="btn btn-secondary btn-md btn-block" style="margin-top:5px" href="/home">Volver</a> 
+    </div> 
+  <% end %>
+</div>
+
+<script>
+  $(document).on('turbolinks:load', function() {
+    $('#election_segmented_by').change(function() {
+      var items;
+      var segmented_by = document.getElementById("election_segmented_by").value;
+      if (segmented_by === "state"){
+        items = ['Artigas', 'Canelones', 'Cerro Largo', 'Colonia', 'Durazno', 'Flores', 'Florida', 'Lavalleja', 'Maldonado', 'Montevideo', 'Paysandú', 
+                 'Río Negro', 'Rivera', 'Rocha', 'Salto', 'San José', 'Soriano', 'Tacuarembó', 'Treinta y Tres'];
+      } else if (segmented_by === "age") {
+        items = ['18-30', '31-40', '41-50', '51-60', '61 y mas'];
+      } else if (segmented_by === "city"){
+        items = ['Artigas', 'Canelones', 'Colonia del Sacramento', 'Durazno', 'Florida', 'Fray Bentos', 
+                 'Maldonado', 'Melo', 'Mercedes', 'Minas', 'Montevideo', 'Paysandú', 'Rivera', 'Rocha', 'Salto', 
+                 'San José de Mayo', 'Tacuarembó', 'Treinta y Tres', 'Trinidad'
+        ];
+      }
+      var options = "";
+      for (var item of items) {
+        options += "<option value=" + item + ">" + item + "</option>";
+      }
+      document.getElementById("election_condition").innerHTML = options;
+    });
+  });
+</script>

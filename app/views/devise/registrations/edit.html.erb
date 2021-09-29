@@ -1,0 +1,75 @@
+<div class="container col-6">
+  <h1 class="d-flex justify-content-between align-items-center mb-3">
+    <h3><span class="shadow-lg badge badge-success d-flex justify-content-center">Editar Mis Datos de Usuario<<%= resource_name.to_s.humanize %></span></h3>
+  </h1>
+</div>
+
+<div class="container col-6 py-4" id="identification-views">
+  <ul class="shadow-lg list-group mb-3">
+    <li class="list-group-item justify-content-center lh-condensed">
+
+      <%= form_for(resource, as: resource_name, url: registration_path(resource_name), html: { method: :put }) do |f| %>
+        <%= render "devise/shared/error_messages", resource: resource %>
+
+        <div class="form-group mt-3">
+          <%= f.label :Correo_electrónico %><br />
+          <%= f.email_field :email, autofocus: true, autocomplete: "email", class: 'form-control list-inline-item text-success' %>
+        </div>
+
+        <% if devise_mapping.confirmable? && resource.pending_reconfirmation? %>
+          <div>Currently waiting confirmation for: <%= resource.unconfirmed_email %></div>
+        <% end %>
+
+        <div class="form-group mt-3">
+          <%= f.label :Nombre_completo %><br />
+          <%= f.text_field :name, autofocus: true, autocomplete: "#{@user.name}", class: 'form-control list-inline-item text-success' %>
+        </div>
+
+        <div class="form-group row">
+          <div class="col-sm-6 col-sm-2">
+            <%= f.label :Fecha_de_Nacimiento %><br />
+            <%= f.date_field :birth_date, autofocus: true, autocomplete: "#{@user.birth_date}", class: 'form-control list-inline-item text-success' %>
+          </div>
+          <div class="col-sm-6">
+            <%= f.label :País %><br />
+            <%= f.select :country, options_for_select(country_options, "#{@user.country}"), { prompt: 'Elegir país' }, class: 'form-control list-inline-item text-success' %>
+          </div>
+        </div>
+
+        <div class="form-group row">
+          <div class="col-sm-6 col-sm-2">
+            <%= f.label :Departamento %><br />
+            <%= f.select :state, options_for_select(state_options, "#{@user.state}"), { prompt: 'Elegir departamento' }, class: 'form-control list-inline-item text-success' %>
+          </div>
+          <div class="col-sm-6">
+            <%= f.label :Ciudad %><br />
+            <%= f.select :city, options_for_select(city_options, "#{@user.city}"), { prompt: 'Elegir ciudad' }, class: 'form-control list-inline-item text-success' %>
+          </div>
+        </div>
+
+        <div class="form-group mt-5">
+          <%= f.label :Contraseña,  class: 'font-weight-bold' %> <small><i> (Dejar en blanco este y el siguiente campo si usted NO desea cambiar su contraseña) </i></small><br />
+          <small><em><%= @minimum_password_length %> caracteres mínimo</em></small>
+          <%= f.password_field :password, autocomplete: "new-password", class: 'form-control list-inline-item text-success' %>
+          <% if @minimum_password_length %>
+          <% end %>
+        </div>
+
+        <div class="form-group mt-3">
+          <%= f.label :Confirmar_contraseña,  class: 'font-weight-bold' %><br />
+          <%= f.password_field :password_confirmation, autocomplete: "new-password", class: 'form-control list-inline-item text-success' %>
+        </div>
+
+        <div class="field">
+          <%= f.label :Contraseña_actual,  class: 'font-weight-bold' %> <i>(necesaria para confirmar los cambios)</i><br />
+          <%= f.password_field :current_password, autocomplete: "current-password", class: 'form-control list-inline-item text-success' %>
+        </div>
+
+        <div class="d-flex justify-content-center align-items-center mt-3">
+          <%= f.submit "Actualizar Datos", class: 'w-50 btn btn-success' %>
+        </div>
+      <% end %>
+
+      </li>
+  </ul>
+</div>

@@ -1,0 +1,27 @@
+<div class="container col-6">
+  <h1 class="d-flex justify-content-between align-items-center mb-3">
+    <h3><span class="shadow-lg badge badge-success d-flex justify-content-center">Olvido de Contraseña</span></h3>
+  </h1>
+</div>
+
+<div class="container col-6 py-4" id="identification-views">
+  <ul class="shadow-lg list-group mb-3">
+    <li class="list-group-item justify-content-center lh-condensed">
+
+      <%= form_for(resource, as: resource_name, url: password_path(resource_name), html: { method: :post }) do |f| %>
+        <%= render "devise/shared/error_messages", resource: resource %>
+
+        <div class="form-group mt-3">
+          <%= f.label :email %><br />
+          <%= f.email_field :email, autofocus: true, autocomplete: "email", class: 'form-control list-inline-item text-success' %>
+        </div>
+
+        <div class="d-flex justify-content-center align-items-center">
+          <%= f.submit "Enviarme instrucciones para resetear mi contraseña", class: 'w-100 btn btn-secondary'%>
+        </div>
+        <% end %>
+  
+      </li>
+    </ul>
+    <span><%= render "devise/shared/links" %></span>
+</div>

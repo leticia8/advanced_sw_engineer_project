@@ -1,0 +1,30 @@
+<div class="container col-6">
+  <h1 class="d-flex justify-content-between align-items-center mb-3">
+    <h4><span class="shadow-lg badge badge-secondary">Datos de la Propuesta</span></h4>
+  </h1>
+  <hr class="mb-1">
+
+  <div class="form-group">
+    <strong>Título:</strong>
+    <%= @proposal.name %>
+  </div>
+
+  <div class="form-group">
+    <strong>Descripción:</strong>
+    <%= @proposal.description %>
+  </div>
+  <hr class="mb-3">
+
+  <h1 class="d-flex justify-content-between align-items-center mb-3">
+    <h4><span class="shadow-lg badge badge-secondary">Opciones de la Propuesta</span></h4>
+  </h1>
+  <hr class="mb-1">
+  <%= render @proposal.options %>
+ 
+  <h1 class="d-flex justify-content-between align-items-center mb-3">
+    <h4><span class="shadow-lg badge badge-secondary">Agregar una Opción</span></h4>
+  </h1>
+  <hr class="mb-1">
+  <%= render 'options/form' %>
+</div>
+
