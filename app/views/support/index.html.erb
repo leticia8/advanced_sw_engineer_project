@@ -1,0 +1,64 @@
+<body>
+    <div class="container">
+        <a name="start" id="start"></a>
+        <div>
+            <div class="row">
+                <div class="col-md-12 mb-3">
+                <div style="background-color:#f8f9fa;color:white;padding:20px">
+                    <h4 class="d-flex justify-content-between align-items-center mb-3">
+                        <h4><span class="text-dark">Soporte:</span></h4>
+                    </h4>
+                </div>
+                <ul class="shadow-lg list-group">
+                    <li class="list-group-item justify-content-between lh-condensed" style="background-color:gray">
+                    <div>
+                        <p><a class="text-white" href="#" onclick="document.getElementById('election-howworks').scrollIntoView(true);return false;">Como funciona una votación</a></p>
+                        <p class="mt-n3"><a class="text-white" href="#" onclick="document.getElementById('election-results').scrollIntoView(true);return false;">Como me entero de los resultados de una elección</a></p>
+                        <p class="mt-n3 mb-n1"><a class="text-white" href="#" onclick="document.getElementById('election-status').scrollIntoView(true);return false;">Como modificar mis datos personales</a></p>
+                    </div>
+                    </li>
+                </ul>
+                <hr class="mb-4">
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="container">
+        <div>
+            <div class="card">
+                <a name="election-howworks" id="election-howworks"></a>
+                <div class="card-block px-3 py-3 px-sm-4 py-sm-3 px-md-5 py-md-4 px-lg-6 py-lg-5 text-justify">
+                    <h5 class="card-title font-weight-bold">Como funciona una votación</h5>
+                    <p>Luego de abierta la votación de la elección, los usuarios que cumplan con las características de segmentación recibirán un correo electrónico incluyendo un enlace para poder votar en la misma. Mientras el usuario no confirme su voto, el enlace se mantendrá activo durante el período de votación. 
+                    La elección estará conformada por una o más propuestas, y cada propuesta tendrá una o más opciones. El usuario deberá seleccionar una opción en cada una de las propuestas disponibles antes de votar.</p>
+                    <p>El voto será validado únicamente si el usuario vota en cada una de las propuestas disponibles. Luego que el voto es validado por la aplicación, el enlace recibido para votar caducará.</p>
+                    <p class="text-right"><a class="text-success" href="#" onclick="document.getElementById('start').scrollIntoView(true);return false;">Ir al principio</a></p>
+                </div>
+            </div>
+
+            <div class="card mt-2">
+                <a name="election-results" id="election-results"></a>
+                <div class="card-block px-3 py-3 px-sm-4 py-sm-3 px-md-5 py-md-4 px-lg-6 py-lg-5 text-justify">
+                    <h5 class="card-title font-weight-bold">Como me entero de los resultados de una elección</h5>
+                    <p>Luego de culminado el proceso de votación, los usuarios que votaron en la elección recibirán un correo electrónico con un enlace para consultar los resultados. Las opciones con más votos dentro de cada propuesta serán aquellas que resulten ganadoras.</p>
+                    <p class="text-right"><a class="text-success" href="#" onclick="document.getElementById('start').scrollIntoView(true);return false;">Ir al principio</a></p>
+                </div>
+            </div>
+
+            <div class="card mt-2">
+                <a name="election-status" id="election-status"></a>
+                <div class="card-block px-3 py-3 px-sm-4 py-sm-3 px-md-5 py-md-4 px-lg-6 py-lg-5 text-justify">
+                    <h5 class="card-title font-weight-bold">Como modificar mis datos personales</h5>
+                    <p>Puede modificar sus datos personales haciendo click en el siguiente enlace: <a class="text-success" href="/users/edit?current_user">Modificar datos personales.</a> Recuerde que primeramente debe encontrarse logueado en la aplicación.</p>
+                    <p>Si no desea modificar su contraseña simplemente deje en blanco los campos correspondientes a: Contraseña y Confirmar contraseña. En todos los casos se solicitará la contraseña actual para confirmar los cambios.</p>
+                    <p class="text-right"><a class="text-success" href="#" onclick="document.getElementById('start').scrollIntoView(true);return false;">Ir al principio</a></p>
+                </div>
+            </div>
+        </div>
+    </div>
+    <button onclick="topFunction()" id="myBtn" title="Go to top">Top</button>
+    <script>
+        $(document).load().scrollTop(0);
+    </script>
+</body>

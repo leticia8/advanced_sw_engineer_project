@@ -1,0 +1,16 @@
+
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta content='text/html; charset=UTF-8' http-equiv='Content-Type' />
+  </head>
+  <body>
+    <p>Has recibido el link de la elección que has creado!</p>
+    <p>Usuario: <%= @user.email %></p>
+    <p>Elección: <%= @election.description %></p>
+    <p>Fecha y hora de inicio: <%= @election.start_date %></p>
+    <p>Por favor ingresa al siguiente link para votar y/o ver la elección:
+    <%= link_to "Votar", email_vote_url(electionId: @election.id) %>
+    </p>
+  </body>
+</html>

@@ -1,0 +1,189 @@
+<div class="container">
+  <div class="py-2">
+    
+    <div id="top" class="col-md-12">
+      <div class="row">
+        <div class="col-md-12 mb-3">
+          <h4 class="d-flex justify-content-between align-items-center mb-3">
+            <h3><span class="shadow-lg badge text-success">Elección seleccionada</span></h3>
+          </h4>
+          <ul class="shadow-lg list-group mb-3">
+            <li class="list-group-item justify-content-between lh-condensed bg-dark">
+              <div>
+                <h7>
+                  <span class="text-white font-weight-bold">Descripción: </span>
+                  <span class="text-white"><%= @election.description %></span>
+                </h7>
+              </div>
+            </li>
+          </ul>
+          <h6 align="right" class="invisible" id="remaining">Cierre de votación en: <span class="text-success font-weight-bold" id="countdown"></span></h6>
+          <hr class="mb-4">
+        </div>
+      </div>
+    </div>
+
+    <div id="bottom" class="col-md-12 order-md-2">
+      <div class="row">
+        <div class="col-md-12 mb-3">
+          <h3 class="invisible mt-3" id="thanks"><span class="d-flex justify-content-center align-self-center text-white shadow-lg badge badge-success blink_me">Gracias por participar!</span></h3>
+          <form class="needs-validation" novalidate> 
+            <% if @user_already_vote %>
+              <h3><span class="d-flex justify-content-center align-self-center text-white shadow-lg badge badge-danger blink_me">Usted ya votó en esta elección</span></h3>    
+            <% else %>
+              <% if @user_can_vote %>
+                <% if @can_vote %> 
+                  <% if @has_proposals %>
+                    <h4><span class="shadow-lg badge badge-secondary">Propuestas y Opciones de Voto</span></h4>
+                    <ul class="shadow-lg list-group mb-3">
+                      <% @election.proposals.each do |proposal| %>
+                        <li class="list-group-item justify-content-between lh-condensed">
+                          <div class="text-success">
+                            <h6>
+                              <span class="text-secondary">Nombre de la propuesta: </span>
+                              <span class="text-success font-weight-bold"><%= proposal.name %></span>
+                            </h6>
+                            <h7>
+                              <span class="text-secondary font-weight-bold">Descripción: </span>
+                              <span class="text-success"><%= proposal.description %></span>
+                            </h7>
+                            <div class="py-3">
+                              <small class="text-secondary">Opciones de Voto: </small>
+                              <select class="shadow-lg custom-select d-block options" id="Options" required>
+                                <option value="-1" disabled selected>Click para desplegar...</option>
+                                <% proposal.options.each do |option| %>
+                                  <option value="<%= option.id %>"><%= option.description %></option>
+                                <% end %>
+                              </select>
+                              <div class="invalid-feedback">La opción seleccionada no es correcta</div>
+                            </div>
+                          </div>
+                        </li>
+                      <% end %>
+                    </ul>
+                    <hr class="mb-4">
+                    <button type="button" id="vote_button" class="shadow-lg btn btn-success btn-lg btn-block" data-toggle="modal" onClick="preVote()" data-target="#confirmarVotoModal">Votar</button>
+                    <a class="btn btn-secondary btn-lg btn-block" href="/home">No Votar</a> 
+                  <% else %>
+                    <h5><span class="d-flex justify-content-center align-self-center text-secondary">La elección no tiene propuestas para votar</span></h5>
+                  <% end %>
+                <% else %>
+                  <h5><span class="d-flex justify-content-center align-self-center text-secondary">La elección no se encuentra dentro del período habilitado para votar</span></h5>
+                <% end %>
+              <% else %>
+                <h5><span class="d-flex justify-content-center align-self-center text-white shadow-lg badge badge-info blink_me">El usuario no cumple con los criterios de segmentación</span></h5>    
+              <% end %>
+            <% end %>
+          </form>
+        <h6 class="visible mt-2" id="dont-forget"><span class="d-flex justify-content-center align-self-center text-secondary">Antes de salir de esta ventana procure cerrar correctamente su sesión</span></h6>
+        </div>
+      </div>                  
+    </div> 
+
+    <!-- Modal -->
+    <div class="modal fade" id="confirmarVotoModal" data-backdrop="static" data-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="">Votar Propuesta</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <%= form_with scope: :vote, url: vote_index_path, local: true do |form| %>
+            <%= hidden_field :election, :id %>
+          <div class="modal-body">
+            <p>¿Confirma la votación de las opciones?</p>
+            <p class="text-danger">Recuerde que esta acción NO se puede deshacer</p>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-success" data-dismiss="modal" onClick="postVote()">Confirmar</button>
+            <button type="button" class="btn btn-danger" data-dismiss="modal">Cancelar</button>
+          </div>
+          <% end %>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<script>
+    var end = new Date('<%= @election.finish_date %>');
+    var start = new Date('<%= @election.start_date %>');
+
+    var _second = 1000;
+    var _minute = _second * 60;
+    var _hour = _minute * 60;
+    var _day = _hour * 24;
+    var timer;
+
+    // This function verifies that all checkboxes have option selected
+    function preVote() {
+      const host = $(window)[0].location.origin
+      const optionsObjects = document.getElementsByClassName('options');
+
+      for  (i = 0; i < optionsObjects.length; i++) {
+        const obj = optionsObjects[i]
+        if (obj.options[obj.selectedIndex].value == "-1") {
+          alert("ATENCIÓN:\nDebe seleccionar al menos una opción en cada una de las propuestas disponibles")
+          $('button[id^="vote_button"]').removeAttr('data-target');
+          return;
+        }
+        $('button[id^="vote_button"]').attr("data-target", "#confirmarVotoModal");
+        return;
+      }
+    }
+
+    function postVote() {
+      const host = $(window)[0].location.origin
+      const optionsObjects = document.getElementsByClassName('options');
+      const length = optionsObjects.length
+      var optionsId = [];
+      const electionId = document.getElementById('election_id').value;
+
+      for  (i = 0; i < length; i++) {
+        const obj = optionsObjects[i]
+        optionsId.push(obj.options[obj.selectedIndex].value)
+      }
+      let formData = new FormData();
+
+      formData.append('authenticity_token', $("[name='authenticity_token']").val());
+      formData.append('optionsId', optionsId);
+      formData.append('electionId', electionId)
+
+      fetch(`${host}/vote`, { method: 'POST', body: formData })
+      .then( console.log('Everything was fine!'))
+
+      $('div[id^="bottom"]').removeClass('visible').addClass('invisible');
+      $('h3[id^="thanks"]').removeClass('invisible').addClass('visible');
+    }
+
+    function showRemaining() {
+        var now = new Date();
+        var distance = end - now;
+        if (distance < 0) {
+
+            clearInterval(timer);
+            document.getElementById('countdown').innerHTML = 'LA VOTACION YA CERRÓ';
+
+            return;
+        }
+        var days = Math.floor(distance / _day);
+        var hours = Math.floor((distance % _day) / _hour);
+        var minutes = Math.floor((distance % _hour) / _minute);
+        var seconds = Math.floor((distance % _minute) / _second);
+
+        document.getElementById('countdown').innerHTML = days + ' dias, ';
+        document.getElementById('countdown').innerHTML += hours + ' horas, ';
+        document.getElementById('countdown').innerHTML += minutes + ' minutos y ';
+        document.getElementById('countdown').innerHTML += seconds + ' segundos';
+        
+        // We prevent the sample of proposals if the voting is closed
+        if ((now - start) > 0 ) {
+          $('h6[id^="remaining"]').removeClass('invisible').addClass('visible');
+        }
+    }
+
+    timer = setInterval(showRemaining, 1000);
+</script>
