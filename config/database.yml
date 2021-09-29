@@ -1,0 +1,20 @@
+default: &default
+  adapter: postgresql
+  encoding: unicode
+  username: <%= ENV['DB_USERNAME'] %>
+  password: <%= ENV['DB_PASSWORD'] %>
+  pool: 5
+  timeout: 5000
+
+development:
+  <<: *default
+  database: topicos_development
+
+test:
+  <<: *default
+  database: topicos_test
+
+production:
+  <<: *default
+  database: topicos_production
+  url: <%= ENV['DATABASE_URL'] %>
